@@ -1,0 +1,42 @@
+<svg width="960" height="600"></svg>
+<!-- <input type="button" (click)="addNode()"> -->
+<div id="menu">
+  <form>
+    Layer Type
+    <select name="layerType" id="layerType" required autofocus [(ngModel)]="layerType">
+      <option value="FullyConnectedLayer">Fully connected layer</option>
+      <option value="Conv2D">Conv 2D</option>
+      <option value="MaxPooling2D">MaxPooling2D</option>
+    </select>
+    Number of nodes<input type="text" name="nNodes" id="nNodes" required autofocus [(ngModel)]="nNodes">
+    <br>
+    Activation
+    <select name="activation" id="activation" required autofocus [(ngModel)]="activation">
+      <option value="relu">relu</option>
+      <option value="sigmoid">sigmoid</option>
+      <option value="tanh">tanh</option>
+    </select>
+    <br>
+    <input type="submit" value="addNodes" (click)="addNodes()"/>
+  </form>
+
+  <br>
+  <input type="button" value="info" (click)="getInfo()"/> 
+  <div *ngIf="showDetails">
+    <ul>
+      <li *ngFor="let item of displayLayers">
+        <div *ngFor="let elem of item">
+          {{elem.id}}
+        </div>
+        <br>
+      </li>
+    </ul>
+  </div>
+
+  <input type="button" value="code" (click)="generateCode()"/> 
+  <div *ngIf="showCode">
+    <code *ngFor="let item of code">
+      {{item}}<br>
+    </code>
+  </div>
+</div>
