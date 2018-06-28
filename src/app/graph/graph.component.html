@@ -17,7 +17,15 @@
       <option value="tanh">tanh</option>
     </select>
     <br>
-    <input type="submit" value="addNodes" (click)="addNodes()"/>
+    <!-- <div *ngIf="layerType=='FullyConnectedLayer'">
+      <input type="submit" value="addNodes" (click)="addNodes()"/>
+    </div> -->
+    <div [ngSwitch]="layerType">
+      <div *ngSwitchCase="'FullyConnectedLayer'"><input type="submit" value="addNodes" (click)="addNodes()"/></div>
+      <div *ngSwitchCase="'Conv2D'"><input type="submit" value="addConv" (click)="addConv()"/></div>
+      <div *ngSwitchCase="'MaxPooling2D'"><input type="submit" value="addPool" (click)="addPool()"/></div>
+      <div *ngSwitchDefault>....</div>
+    </div>
   </form>
 
   <br>

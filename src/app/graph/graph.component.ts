@@ -1,7 +1,4 @@
-//our root app component
 import {Component, NgModule, OnInit, AfterViewInit, OnDestroy} from '@angular/core'
-import {BrowserModule} from '@angular/platform-browser'
-// import {miserables} from './miserables'
 import * as d3 from 'd3';
 
 @Component({
@@ -10,6 +7,7 @@ import * as d3 from 'd3';
   styleUrls: ['./graph.component.css']
 })
 export class GraphComponent implements OnInit, AfterViewInit {
+  svg;
   link;
   node;
   nodes;
@@ -25,6 +23,9 @@ export class GraphComponent implements OnInit, AfterViewInit {
   displayLayers: Array<any>;
   code;
   showCode:boolean;
+  nNodes;
+  activation;
+  layerType;
 
   constructor(){
     this.cx = 10
@@ -63,9 +64,9 @@ export class GraphComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(){
-    var svg = d3.select("svg");
-    var width = +svg.attr("width");
-    var height = +svg.attr("height");
+    this.svg = d3.select("svg");
+    var width = +this.svg.attr("width");
+    var height = +this.svg.attr("height");
     this.color = d3.scaleOrdinal().range(["black", "green", "blue", "black", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
     
     this.simulation = d3.forceSimulation()
@@ -76,7 +77,10 @@ export class GraphComponent implements OnInit, AfterViewInit {
         .force("y", d3.forceY())
         .alphaTarget(1)
         .on("tick", () => this.ticked());
-    var g = svg.append("g").attr("transform", "translate(" + 100 + "," + 100 + ")");
+
+    // This is a box around layers at x,y
+    var g = this.svg.append("g").attr("transform", "translate(" + 30 + "," + 100 + ")")
+
     // var g = svg.append("g").attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
     this.link = g.append("g").attr("stroke", "#000").attr("stroke-width", 1.5).selectAll(".link"),
     this.node = g.append("g").attr("stroke", "#fff").attr("stroke-width", 1.5).selectAll(".node");
@@ -94,13 +98,33 @@ export class GraphComponent implements OnInit, AfterViewInit {
   // }
 
   addConv(){
+    // Rectangle for Conv2D
+    let yGap = 600 / 3;
+    let y = yGap
 
+    var data = [{x1: this.cx, x2: this.cx+90, y1: y, y2: y+90}];
+                // {x1: 50, x2: 80, y1: 100, y2: 150},
+                // {x1: 200, x2: 400, y1: 10, y2: 100}];
+
+    var rects = this.svg.selectAll("foo")
+      .data(data)
+      .enter()
+      .append("rect")
+      .attr("x", d=> d.x1)
+      .attr("y", d=> d.y1)
+      .attr("width", d=> d.x2 - d.x1)
+      .attr("height", d=> d.y2 - d.y1)
+      .attr("stroke-width", 1.5)
+      .attr("stroke", "rgb(0,0,0)")
+      .attr("fill", "white");
+
+    this.restart();
+
+    this.cx += 150
   }
 
   addNodes(){
-    let nNodes: any = (<HTMLInputElement>document.getElementById("nNodes")).value;
-    let activation: any = (<HTMLInputElement>document.getElementById("activation")).value;
-    if(!nNodes){
+    if(!this.nNodes){
       alert("Specify nNodes")
       return;
     }
@@ -108,15 +132,15 @@ export class GraphComponent implements OnInit, AfterViewInit {
     this.nodesByLayers[this.nLayer] = {}
     this.nodesByLayers[this.nLayer].nodes = []
     this.nodesByLayers[this.nLayer].details = {}
-    this.nodesByLayers[this.nLayer].details.activation = activation?activation:'relu'
-    this.nodesByLayers[this.nLayer].details.nNodes = nNodes
+    this.nodesByLayers[this.nLayer].details.activation = this.activation?this.activation:'relu'
+    this.nodesByLayers[this.nLayer].details.nNodes = this.nNodes
     
     let lastNode = this.newNode;
     
-    let yGap = 500 / (+nNodes+2);
+    let yGap = 600 / (+this.nNodes+3);
     let y = yGap
 
-    for (let i = 0; i < nNodes; i++){
+    for (let i = 0; i < this.nNodes; i++){
       let newel = {id: lastNode, cy: y, cx: this.cx, layer: this.nLayer};
       y += yGap;
 
