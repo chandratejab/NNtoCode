@@ -16,3 +16,12 @@
     margin-bottom: 0px;
     margin-left: auto;
 }
+
+
+#fullNets {
+  border-style: solid;
+}
+
+app-fully-connected-layers app-conv2-d {
+  display: inline-block
+}
