@@ -15,6 +15,8 @@ export class GraphComponent implements OnInit, AfterViewInit {
   showCode:boolean;
   activation;
   layerType;
+  displayLayers;
+  showDetails;
 
   constructor(){
   }
@@ -56,10 +58,10 @@ export class GraphComponent implements OnInit, AfterViewInit {
     this.nodesByLayers = this.fullyConnectedLayers.addNodes();
   }
 
-  // getInfo(){
-  //   this.displayLayers = Object.keys(this.nodesByLayers).map(key=>this.nodesByLayers[key].nodes)
-  //   this.showDetails = !this.showDetails
-  // }
+  getInfo(){
+    this.displayLayers = Object.keys(this.nodesByLayers).map(key=>this.nodesByLayers[key].nodes)
+    this.showDetails = !this.showDetails
+  }
 
   generateCode(){
     this.showCode = !this.showCode
