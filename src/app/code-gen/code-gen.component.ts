@@ -40,8 +40,8 @@ export class CodeGenComponent implements OnInit {
       //                 .formatUnicorn(params))
 
       this.code.push(this.getCode(params))
-      this.code.push("classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])")
     }
+    this.code.push("classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])")
   }
 
   getCode(params){

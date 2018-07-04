@@ -1,8 +1,8 @@
 .links line {
-    stroke: #000;
-    stroke-opacity: 0.6;
-    stroke-width: 1.5px;
-  }
+  stroke: #000;
+  stroke-opacity: 0.6;
+  stroke-width: 1.5px;
+}
   
 .nodes circle {
   stroke: #fff;
@@ -10,11 +10,11 @@
 }
 
 #menu{ 
-    /* max-width: 300px; */
-    margin-top: 0px;
-    margin-right: auto;
-    margin-bottom: 0px;
-    margin-left: auto;
+  /* max-width: 300px; */
+  margin-top: 0px;
+  margin-right: auto;
+  margin-bottom: 0px;
+  margin-left: auto;
 }
 
 
