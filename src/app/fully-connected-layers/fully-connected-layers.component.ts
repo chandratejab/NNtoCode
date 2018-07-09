@@ -31,6 +31,8 @@ export class FullyConnectedLayersComponent implements OnInit, AfterViewInit {
   showCode:boolean;
 
   constructor(){
+    // this.ngOnInit();
+    // this.ngAfterViewInit();
   }
 
   ngOnInit(){ 
@@ -41,7 +43,9 @@ export class FullyConnectedLayersComponent implements OnInit, AfterViewInit {
     this.nLayer = 0
     this.showDetails= false;
     this.nodesByLayers = {}
+    this.nodesByLayers.data = {}
     this.showCode = false
+    this.nodesByLayers.info = "fullyConnectedLayer"
 
     // String.prototype.formatUnicorn = String.prototype.formatUnicorn || this.formatUnicorn
     String.prototype.formatUnicorn = String.prototype.formatUnicorn ||
@@ -97,11 +101,12 @@ export class FullyConnectedLayersComponent implements OnInit, AfterViewInit {
       return;
     }
     this.nLayer++
-    this.nodesByLayers[this.nLayer] = {}
-    this.nodesByLayers[this.nLayer].nodes = []
-    this.nodesByLayers[this.nLayer].details = {}
-    this.nodesByLayers[this.nLayer].details.activation = this.activation?this.activation:'relu'
-    this.nodesByLayers[this.nLayer].details.nNodes = this.nNodes
+    this.nodesByLayers.data[this.nLayer] = {}
+    this.nodesByLayers.data[this.nLayer].nodes = []
+    this.nodesByLayers.data[this.nLayer].details = {}
+    this.nodesByLayers.data[this.nLayer].details.activation = this.activation?this.activation:'relu'
+    this.nodesByLayers.data[this.nLayer].details.nNodes = this.nNodes
+    this.nodesByLayers.data[this.nLayer].type = "fullyConnectedLayer"
     
     let lastNode = this.newNode;
     
@@ -119,7 +124,7 @@ export class FullyConnectedLayersComponent implements OnInit, AfterViewInit {
       }
       this.layer+=50
       lastNode++;
-      this.nodesByLayers[this.nLayer].nodes.push(newel);
+      this.nodesByLayers.data[this.nLayer].nodes.push(newel);
     }
 
     this.restart();

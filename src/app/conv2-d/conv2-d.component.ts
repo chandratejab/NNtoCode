@@ -20,6 +20,7 @@ export class Conv2DComponent implements OnInit, AfterViewInit {
   linksBottom;
   nodesByLayers;
   nLayer;
+  nNodes; // this should be size
 
   constructor() { 
   }
@@ -31,6 +32,7 @@ export class Conv2DComponent implements OnInit, AfterViewInit {
     this.linksBottom=[]
     this.nLayer = 0
     this.nodesByLayers = {}
+    this.nodesByLayers.data = {}
     this.nodesByLayers.info = "conv2D"
   }
 
@@ -61,11 +63,13 @@ export class Conv2DComponent implements OnInit, AfterViewInit {
 
   addConv(){
     this.nLayer++
-    this.nodesByLayers[this.nLayer] = {}
-    this.nodesByLayers[this.nLayer].nodes = []
-    this.nodesByLayers[this.nLayer].details = {}
-    // this.nodesByLayers[this.nLayer].details.activation = this.activation?this.activation:'relu'
-    // this.nodesByLayers[this.nLayer].details.nNodes = this.nNodes
+    this.nodesByLayers.data[this.nLayer] = {}
+    this.nodesByLayers.data[this.nLayer].nodes = []
+    this.nodesByLayers.data[this.nLayer].details = {}
+    // this.nodesByLayers.data[this.nLayer].details.activation = this.activation?this.activation:'relu'
+    this.nodesByLayers.data[this.nLayer].details.nNodes = this.nNodes // this should be size
+    this.nodesByLayers.data[this.nLayer].details.kernelSize = "(3,2)"
+    this.nodesByLayers.data[this.nLayer].type = "conv2D"
 
     // Rectangle for Conv2D
     let yGap = 600 / 3;
@@ -81,11 +85,43 @@ export class Conv2DComponent implements OnInit, AfterViewInit {
 
     this.restart();
 
-    this.nodesByLayers[this.nLayer].nodes.push(newEl);
+    this.nodesByLayers.data[this.nLayer].nodes.push(newEl);
 
     this.cx += 120
     this.svg.attr("width", this.cx);
     // GlobalVars.cx += 90
+    return this.nodesByLayers
+  }
+
+  addPool(){
+    this.nLayer++
+    this.nodesByLayers.data[this.nLayer] = {}
+    this.nodesByLayers.data[this.nLayer].nodes = []
+    this.nodesByLayers.data[this.nLayer].details = {}
+    // this.nodesByLayers.data[this.nLayer].details.activation = this.activation?this.activation:'relu'
+    this.nodesByLayers.data[this.nLayer].details.nNodes = this.nNodes
+    this.nodesByLayers.data[this.nLayer].type = "pool2D"
+
+    // Rectangle for Conv2D
+    let yGap = 600 / 3;
+    let y = yGap
+
+    let newEl = {x1: this.cx+10, x2: this.cx+60, y1: y, y2: y+60};
+    this.nodes.push(newEl);
+
+    if (typeof this.nodes.slice(-2,-1) !== 'undefined' && this.nodes.slice(-2,-1).length > 0) {
+      this.links.push({source: this.nodes.slice(-2,-1)[0], target: newEl});
+      this.linksBottom.push({source: this.nodes.slice(-2,-1)[0], target: newEl});
+    }
+
+    this.restart();
+
+    this.nodesByLayers.data[this.nLayer].nodes.push(newEl);
+
+    this.cx += 120
+    this.svg.attr("width", this.cx);
+    // GlobalVars.cx += 90
+    return this.nodesByLayers
   }
 
   restart() {
@@ -110,7 +146,7 @@ export class Conv2DComponent implements OnInit, AfterViewInit {
 
     this.linkBottom = this.linkBottom.data(this.linksBottom, function(d) { return d.source.id + "-" + d.target.id; });
     this.linkBottom.exit().remove();
-    this.linkBottom = this.linkBottom.enter().append("line").attr("fill", (d) => { return this.color(d.id); }).merge(this.link);
+    this.linkBottom = this.linkBottom.enter().append("line").attr("fill", (d) => { return this.color(d.id); }).merge(this.linkBottom);
 
     // Update and restart the simulation.
     this.simulation.nodes(this.nodes);

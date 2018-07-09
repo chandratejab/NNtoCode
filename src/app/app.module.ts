@@ -21,6 +21,7 @@ import { CodeGenComponent } from './code-gen/code-gen.component';
     FormsModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [Conv2DComponent, FullyConnectedLayersComponent]
 })
 export class AppModule { }

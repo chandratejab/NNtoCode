@@ -1,57 +1,82 @@
-<app-conv2-d #conv2D></app-conv2-d>
-<app-fully-connected-layers #fullyConnectedLayers [layerType]='layerType' [activation]='activation' [nNodes]='nNodes'></app-fully-connected-layers>
+<!-- <app-conv2-d #conv2D></app-conv2-d>
+<app-fully-connected-layers #fullyConnectedLayers [layerType]='layerType' [activation]='activation' [nNodes]='nNodes'></app-fully-connected-layers> --> 
 <!-- <app-code-gen #codeGenerator [nodesByLayers]="nodesByLayers"></app-code-gen> -->
-
+<!-- <div> -->
+<!-- </div> -->
 <!-- <div *ngFor="let connectedLayer in connectedLayerArray">
   <app-fully-connected-layers [layerType]='connectedLayer.layerType' [activation]='connectedLayer.activation' [nNodes]='connectedLayer.nNodes'></app-fully-connected-layers>
 </div> -->
 <!-- <input type="button" (click)="addNode()"> -->
-<div id="menu">
-  <form>
-    Layer Type
-    <select name="layerType" id="layerType" required autofocus [(ngModel)]="layerType">
-      <option value="FullyConnectedLayer">Fully connected layer</option>
-      <option value="Conv2D">Conv 2D</option>
-      <option value="MaxPooling2D">MaxPooling2D</option>
-    </select>
-    Number of nodes
-    <input type="text" name="nNodes" id="nNodes" required autofocus [(ngModel)]="nNodes">
-    <br> Activation
-    <select name="activation" id="activation" required autofocus [(ngModel)]="activation">
-      <option value="relu">relu</option>
-      <option value="sigmoid">sigmoid</option>
-      <option value="tanh">tanh</option>
-    </select>
-    <br>
+<!-- <button (click)="addComponent(fullyConnectedLayersComponentClass)">Add</button> -->
+<ng-template #container></ng-template>
 
-    <div [ngSwitch]="layerType">
-      <div *ngSwitchCase="'FullyConnectedLayer'">
-        <input type="submit" value="addNodes" (click)="addNodes()" />
-      </div>
-      <div *ngSwitchCase="'Conv2D'">
-        <input type="submit" value="addConv" (click)="addConv()" />
-      </div>
-      <div *ngSwitchCase="'MaxPooling2D'">
-        <input type="submit" value="addPool" (click)="addPool()" />
-      </div>
-      <div *ngSwitchDefault>....</div>
-    </div>
-  </form>
+<button (click)="addInputLayer()">Add Input Layer</button>
 
-  <!-- Create Components for below divs -->
-  <br>
-  <input type="button" value="info" (click)="getInfo()" />
-  <div *ngIf="showDetails">
-    <ul>
-      <li *ngFor="let item of displayLayers">
-        <div *ngFor="let elem of item">
-          {{elem.id}}
+<div *ngIf='isNetworkInitialized'>
+  <button (click)="addFullyConnectedLayerComponent()">Add Fully Connected Neurons Block</button>
+  <button (click)="addConvLayerComponent()">Add Conv Layer</button>
+  <div id="menu">
+    <form>
+      Layer Type
+      <select name="layerType" id="layerType" required autofocus [(ngModel)]="layerType">
+        <!-- <option value="FullyConnectedLayer">Fully connected layer</option>
+        <option value="Conv2D">Conv 2D</option>
+        <option value="MaxPooling2D">MaxPooling2D</option> -->
+        <option *ngFor="let opt of activeOptions" value="{{opt}}">
+          {{ opt }}
+        </option>
+      </select>
+      
+      <div *ngIf="layerType=='Layer'">
+        Number of nodes
+        <input type="text" name="nNodes" id="nNodes" required autofocus [(ngModel)]="nNodes">
+      </div>
+      <div *ngIf="layerType=='Conv2D'">
+        Size
+        <input type="text" name="nNodes" id="nNodes" required autofocus [(ngModel)]="nNodes">
+      </div>
+      <div *ngIf="layerType=='MaxPooling2D'">
+        Size
+        <input type="text" name="nNodes" id="nNodes" required autofocus [(ngModel)]="nNodes">
+      
+      </div>
+      <br> Activation
+      <select name="activation" id="activation" required autofocus [(ngModel)]="activation">
+        <option value="relu">relu</option>
+        <option value="sigmoid">sigmoid</option>
+        <option value="tanh">tanh</option>
+      </select>
+      <br>
+
+      <div [ngSwitch]="layerType">
+        <div *ngSwitchCase="'Layer'">
+          <input type="submit" value="addNodes" (click)="addNodes()" />
         </div>
-        <br>
-      </li>
-    </ul>
-  </div>
+        <div *ngSwitchCase="'Conv2D'">
+          <input type="submit" value="addConv" (click)="addConv()" />
+        </div>
+        <div *ngSwitchCase="'MaxPooling2D'">
+          <input type="submit" value="addPool" (click)="addPool()" />
+        </div>
+        <div *ngSwitchDefault>....</div>
+      </div>
+    </form>
 
-  <input type="button" value="code" (click)="generateCode()" />
-  <app-code-gen #codeGenerator [nodesByLayers]="nodesByLayers" [showCode]="showCode"></app-code-gen>
+    <!-- Create Components for below divs -->
+    <br>
+    <input type="button" value="info" (click)="getInfo()" />
+    <div *ngIf="showDetails">
+      <ul>
+        <li *ngFor="let item of displayLayers">
+          <div *ngFor="let elem of item">
+            {{elem.id}}
+          </div>
+          <br>
+        </li>
+      </ul>
+    </div>
+
+    <input type="button" value="code" (click)="generateCode()" />
+    <app-code-gen #codeGenerator [nodesByLayers]="nodesByLayers" [wholeNetwork]="wholeNetwork" [showCode]="showCode"></app-code-gen>
+  </div>
 </div>
