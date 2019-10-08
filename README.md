@@ -1,8 +1,9 @@
 # NNtoCode
+WIP
 
-Angular6 application which generates python code for the neural network architectures designed on UI.
-Currently generates code for Keras library. Later versions may also generate code for different libraries like TensorFlow, PyTorch etc.
-Develop branch has updated code and is not tested.
+Generates Keras code snippets for the neural network architectures designed on UI.
+Later versions may also generate code for different libraries like TensorFlow, PyTorch etc.
+Develop branch has updated code.
 
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
